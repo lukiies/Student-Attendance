@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:padding="24dp">
+
+    <!-- agrupa tudo na vertical e centraliza na tela -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Título -->
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="UWS Smart Attendance"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#000000"/>
+
+        <!-- Subtítulo -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create an account"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="24dp"/>
+
+        <!-- Descrição -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enter your email to sign up for this app"
+            android:textSize="14sp"
+            android:textColor="#555555"
+            android:layout_marginTop="4dp"/>
+
+        <!-- Campo de e-mail -->
+        <EditText
+            android:id="@+id/emailInput"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:hint="studentId@studentmail.uws.ac.uk"
+            android:background="@drawable/rounded_edittext"
+            android:padding="12dp"
+            android:inputType="textEmailAddress"/>
+
+        <!-- Botão Continuar -->
+        <Button
+            android:id="@+id/btnContinue"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:text="Continue"
+            android:backgroundTint="#000000"
+            android:textColor="#FFFFFF"/>
+
+        <!-- Separador -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="16dp">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="#CCCCCC"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="or"
+                android:textColor="#555555"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="#CCCCCC"/>
+        </LinearLayout>
+
+        <!-- Botão com logo UWS -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="8dp"
+            android:background="@drawable/rounded_linearlayout"
+            android:clickable="true"
+            android:focusable="true"
+            android:backgroundTint="@null"
+            android:layout_marginTop="16dp">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:contentDescription="Logo UWS"
+                android:src="@drawable/uws_logo" />
+
+            <Button
+                android:id="@+id/btnContinueUws"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:text="Continue with UWS Student"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:backgroundTint="#EEEEEE" />
+        </LinearLayout>
+
+        <!-- Texto de política -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="By clicking continue, you agree to our Terms of Service and Privacy Policy"
+            android:textSize="12sp"
+            android:textColor="#777777"
+            android:gravity="center"
+            android:layout_marginTop="24dp"/>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
