@@ -117,7 +117,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <!-- Botão fixo embaixo -->
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/manualCheckinButton"
         android:layout_width="0dp"
         android:layout_height="60dp"
