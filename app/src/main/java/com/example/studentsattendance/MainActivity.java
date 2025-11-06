@@ -42,10 +42,10 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment createFragment(int position) {
-            //if (position == 0)
+            if (position == 0)
                 return new MapFragment();
-            //else
-                //return new ProfileFragment();
+            else
+                return new ProfileFragment();
         }
 
         //TabLayoutMediator chama esse metodo pra saber quantas posicoes tem
