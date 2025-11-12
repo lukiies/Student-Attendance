@@ -20,7 +20,6 @@ public class ProfileFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        // Configurando os campos
         setupRow(view, R.id.rowProgram, R.drawable.ic_school, "Program", "MSc. Artificial Intelligence", false);
         setupRow(view, R.id.rowEmail, R.drawable.ic_email, "Email", "B01819068@studentmail.uws.ac.uk", false);
         setupRow(view, R.id.rowStudentId, R.drawable.ic_id, "Student ID", "B01819068", false);

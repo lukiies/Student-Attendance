@@ -1,6 +1,7 @@
 package com.example.studentsattendance;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -22,20 +23,26 @@ public class LoginActivity extends AppCompatActivity {
         btnContinue = findViewById(R.id.btnContinue);
         btnContinueUws = findViewById(R.id.btnContinueUws);
 
-        btnContinue.setOnClickListener(v -> {
-            String email = emailInput.getText().toString();
-            if (email.isEmpty()) {
-                Toast.makeText(this, "Please enter your UWS email", Toast.LENGTH_SHORT).show();
-            } else {
-                // Vai para a próxima tela (ProfileActivity)
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
+        btnContinue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = emailInput.getText().toString();
+                if (email.isEmpty()) {
+                    Toast.makeText(LoginActivity.this, "Please enter your UWS email", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
-        btnContinueUws.setOnClickListener(v -> {
-            Toast.makeText(this, "UWS login coming soon!", Toast.LENGTH_SHORT).show();
+        btnContinueUws.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(LoginActivity.this, "UWS login coming soon!", Toast.LENGTH_SHORT).show();
+            }
         });
+
 
     }
 }

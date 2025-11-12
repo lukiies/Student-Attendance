@@ -25,17 +25,15 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
 
-        //metodo que decide o que mostrar em cada aba do menu
         viewPager.setAdapter(new ScreenSlidePagerAdapter(this));
 
-        //verifica qual o texto eu vou mostrar no menu dependendo da posicao que esta
         new TabLayoutMediator(tabLayout, viewPager,
                 (tab, position) -> tab.setText(position == 0 ? "Map" : "Profile")
         ).attach();
     }
 
     private static class ScreenSlidePagerAdapter extends FragmentStateAdapter {
-        //parametro indica qual activity o viewPager esta setado
+        //fa represents wich activity o viewPager is implemented
         public ScreenSlidePagerAdapter(FragmentActivity fa) {
             super(fa);
         }
@@ -48,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 return new ProfileFragment();
         }
 
-        //TabLayoutMediator chama esse metodo pra saber quantas posicoes tem
+        //TabLayoutMediator call this method to know how many fragments we have
         @Override
         public int getItemCount() {
             return 2;

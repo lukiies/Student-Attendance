@@ -21,16 +21,19 @@ public class MapFragment extends Fragment  {
 
         Button manualCheckinButton = view.findViewById(R.id.manualCheckinButton);
 
-        manualCheckinButton.setOnClickListener(v -> {
-            View dialogView = getLayoutInflater().inflate(R.layout.dialog_scan_barcode, null);
+        manualCheckinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                View dialogView = getLayoutInflater().inflate(R.layout.dialog_scan_barcode, null);
 
-            ImageView barcodeImage = dialogView.findViewById(R.id.barcodeImage);
+                ImageView barcodeImage = dialogView.findViewById(R.id.barcodeImage);
 
-            // Criar e mostrar o dialog
-            new androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                    .setView(dialogView)
-                    .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                    .show();
+                // Create and show the dialog
+                new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                        .setView(dialogView)
+                        .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                        .show();
+            }
         });
 
         return view;
