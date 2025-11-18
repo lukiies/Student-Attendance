@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <!-- Conteúdo rolável que suporta scroll aninhado -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -22,7 +21,7 @@
             android:paddingTop="32dp"
             android:paddingBottom="32dp">
 
-            <!-- Título centralizado -->
+            <!-- Title -->
             <TextView
                 android:id="@+id/appTitle"
                 android:layout_width="match_parent"
@@ -55,7 +54,7 @@
                         android:id="@+id/statusIcon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/baseline_location_on_24"
+                        android:src="@drawable/ic_map"
                         app:tint="#38A169"
                         android:contentDescription="Status Icon" />
 
@@ -116,7 +115,7 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Botão fixo embaixo -->
+    <!-- Button -->
     <Button
         android:id="@+id/manualCheckinButton"
         android:layout_width="0dp"

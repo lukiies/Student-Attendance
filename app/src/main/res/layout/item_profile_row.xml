@@ -6,7 +6,7 @@
     android:gravity="center_vertical"
     android:padding="12dp"
     android:layout_marginBottom="8dp"
-    android:background="@drawable/rounded_light_bg">
+    android:background="@drawable/rounded_border_sm">
 
     <ImageView
         android:id="@+id/leftIcon"
