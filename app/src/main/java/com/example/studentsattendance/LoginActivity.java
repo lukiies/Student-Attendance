@@ -24,10 +24,11 @@ public class LoginActivity extends AppCompatActivity {
 
         btnContinue.setOnClickListener(v -> {
             String email = emailInput.getText().toString();
+
             if (email.isEmpty()) {
                 Toast.makeText(this, "Please enter your UWS email", Toast.LENGTH_SHORT).show();
             } else {
-                // Vai para a próxima tela (ProfileActivity)
+                // Move to next screen - mainActivity
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
             }

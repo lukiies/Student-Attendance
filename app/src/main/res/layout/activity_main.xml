@@ -7,7 +7,7 @@
     android:background="@android:color/white"
     android:backgroundTint="@null">
 
-    <!-- biblioteca que disponibiliza o menu flutuante-->
+    <!-- Library that provides the floating menu-->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
         android:background="@android:color/transparent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <!-- desliza horizontalmente entre as telas-->
+    <!-- Slides horizontally between screens-->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="0dp"
