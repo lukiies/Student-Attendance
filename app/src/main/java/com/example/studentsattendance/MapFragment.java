@@ -36,7 +36,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, TrackGP
 
     // UWS Campus coordinates
     private static final LatLng UWS_CAMPUS = new LatLng(55.8440749, -4.4303226);
-    private static final double CAMPUS_RADIUS_METERS = 250;
+    private static final double CAMPUS_RADIUS_METERS = 150;
 
     @Nullable
     @Override

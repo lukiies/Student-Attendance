@@ -29,7 +29,7 @@ public class TrackGPS implements LocationListener {
     protected LocationManager locationManager;
 
     private static final long MINDISTANCE = 10;
-    private static final long MINDELAY = 300000;
+    private static final long MINDELAY = 30000;
 
     public TrackGPS(Context context, LocationUpdateListener listener) {
         this.ctxt = context;
