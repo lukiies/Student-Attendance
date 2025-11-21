@@ -6,21 +6,33 @@
     android:background="@color/white">
 
     <TextView
-        android:id="@+id/dialogTitle"
+        android:id="@+id/tvInstructions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Scan the bar code"
+        android:text="Present this barcode to the scanner on campus"
         android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textSize="14sp"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"/>
 
     <ImageView
         android:id="@+id/barcodeImage"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="8dp"
         android:layout_gravity="center"
-        android:src="@drawable/barcode"
+        android:scaleType="centerInside"
+        android:background="#FFFFFF"
         android:contentDescription="Barcode"/>
+        
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:text="Screen brightness has been increased for better scanning"
+        android:textSize="12sp"
+        android:textColor="#777777"
+        android:gravity="center"/>
 </LinearLayout>

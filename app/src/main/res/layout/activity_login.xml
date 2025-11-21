@@ -20,122 +20,105 @@
 
         <!-- Title -->
         <TextView
-            android:id="@+id/titleText"
+            android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="UWS Smart Attendance"
+            android:text="Welcome Back"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="#000000"/>
 
         <!-- Sub title -->
         <TextView
+            android:id="@+id/tvSubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Create an account"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:layout_marginTop="24dp"/>
-
-        <!-- Description -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Enter your email to sign up for this app"
+            android:text="Sign in to your account"
             android:textSize="14sp"
             android:textColor="#555555"
-            android:layout_marginTop="4dp"/>
+            android:layout_marginTop="8dp"/>
 
         <!-- Email -->
         <EditText
             android:id="@+id/emailInput"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="16dp"
-            android:hint="studentId@studentmail.uws.ac.uk"
+            android:layout_marginTop="24dp"
+            android:hint="Email"
             android:background="@drawable/rounded_edittext"
             android:padding="12dp"
             android:inputType="textEmailAddress"
             android:textColor="@android:color/black"/>
 
-        <!-- Continue button -->
+        <!-- Password -->
+        <EditText
+            android:id="@+id/passwordInput"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="12dp"
+            android:hint="Password"
+            android:background="@drawable/rounded_edittext"
+            android:padding="12dp"
+            android:inputType="textPassword"
+            android:textColor="@android:color/black"/>
+
+        <!-- Student ID (for signup) -->
+        <EditText
+            android:id="@+id/studentIdInput"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="12dp"
+            android:hint="Student ID (e.g., B01819068)"
+            android:background="@drawable/rounded_edittext"
+            android:padding="12dp"
+            android:inputType="text"
+            android:textColor="@android:color/black"
+            android:visibility="gone"/>
+
+        <!-- Program (for signup) -->
+        <EditText
+            android:id="@+id/programInput"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="12dp"
+            android:hint="Program (e.g., MSc Artificial Intelligence)"
+            android:background="@drawable/rounded_edittext"
+            android:padding="12dp"
+            android:inputType="text"
+            android:textColor="@android:color/black"
+            android:visibility="gone"/>
+
+        <!-- Action button -->
         <Button
             android:id="@+id/btnContinue"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="16dp"
-            android:text="Continue"
+            android:layout_marginTop="24dp"
+            android:text="Sign In"
             android:backgroundTint="#000000"
             android:textColor="#FFFFFF"/>
 
-        <!-- Separator -->
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- Toggle mode text -->
+        <TextView
+            android:id="@+id/tvToggleMode"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="16dp">
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1"
-                android:background="#CCCCCC"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="or"
-                android:textColor="#555555"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"/>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1"
-                android:background="#CCCCCC"/>
-        </LinearLayout>
-
-        <!-- UWS Button -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:padding="8dp"
-            android:background="@drawable/rounded_second_button"
+            android:text="Don't have an account? Sign Up"
+            android:textSize="14sp"
+            android:textColor="#007BFF"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
             android:clickable="true"
-            android:focusable="true"
-            android:backgroundTint="@null"
-            android:layout_marginTop="16dp">
-
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="8dp"
-                android:contentDescription="Logo UWS"
-                android:src="@drawable/uws_logo" />
-
-            <Button
-                android:id="@+id/btnContinueUws"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="1dp"
-                android:text="Continue with UWS Student"
-                android:textColor="#000000"
-                android:textStyle="bold"
-                android:backgroundTint="#EEEEEE" />
-        </LinearLayout>
+            android:focusable="true"/>
 
         <!-- Term of use -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="By clicking continue, you agree to our Terms of Service and Privacy Policy"
+            android:text="By continuing, you agree to our Terms of Service and Privacy Policy"
             android:textSize="12sp"
             android:textColor="#777777"
             android:gravity="center"
-            android:layout_marginTop="24dp"/>
+            android:layout_marginTop="32dp"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

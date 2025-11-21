@@ -113,7 +113,7 @@
         android:id="@+id/manualCheckinButton"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:text="Manual Check-in"
+        android:text="Register manually"
         android:textColor="@android:color/white"
         app:backgroundTint="#000000"
         app:cornerRadius="12dp"
