@@ -1,0 +1,64 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build Debug APK",
+      "type": "shell",
+      "command": "Set-Location '${workspaceFolder}' ; .\\gradlew.bat assembleDebug",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Install Debug APK",
+      "type": "shell",
+      "command": "Set-Location '${workspaceFolder}' ; .\\gradlew.bat installDebug",
+      "problemMatcher": []
+    },
+    {
+      "label": "Clean Build",
+      "type": "shell",
+      "command": "Set-Location '${workspaceFolder}' ; .\\gradlew.bat clean",
+      "problemMatcher": []
+    },
+    {
+      "label": "Start Emulator",
+      "type": "shell",
+      "command": "C:\\Users\\lukii\\AppData\\Local\\Android\\Sdk\\emulator\\emulator.exe",
+      "args": ["-avd", "Medium_Phone_API_36.1", "-no-snapshot-load"],
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "List Available Emulators",
+      "type": "shell",
+      "command": "C:\\Users\\lukii\\AppData\\Local\\Android\\Sdk\\emulator\\emulator.exe",
+      "args": ["-list-avds"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Build and Install",
+      "type": "shell",
+      "command": "Set-Location '${workspaceFolder}' ; .\\gradlew.bat installDebug",
+      "dependsOn": ["Build Debug APK"],
+      "problemMatcher": []
+    },
+    {
+      "label": "View Logcat",
+      "type": "shell",
+      "command": "C:\\Users\\lukii\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+      "args": ["logcat", "-v", "color"],
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Clear App Data",
+      "type": "shell",
+      "command": "C:\\Users\\lukii\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+      "args": ["shell", "pm", "clear", "com.example.studentsattendance"],
+      "problemMatcher": []
+    }
+  ]
+}
