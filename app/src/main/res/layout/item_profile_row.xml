@@ -36,6 +36,14 @@
             android:text="Value"
             android:textColor="#666666"
             android:textSize="14sp"/>
+
+        <ImageView
+            android:id="@+id/barcodeImage"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="centerCrop"
+            android:visibility="gone"/>
     </LinearLayout>
 
     <ImageView
