@@ -33,6 +33,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, TrackGP
     private TextView statusText, checkInSuccessText;
     private ImageView statusIcon;
     private View statusLayout;
+    private View rootView;
+    private ViewGroup containerGroup;
 
     // UWS Campus coordinates
     private static final LatLng UWS_CAMPUS = new LatLng(55.8440749, -4.4303226);
@@ -44,7 +46,49 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, TrackGP
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_map, container, false);
+        rootView = inflater.inflate(R.layout.fragment_map, container, false);
+        containerGroup = (ViewGroup) rootView;
+        checkAndDisplayContent();
+        return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        checkAndDisplayContent();
+    }
+
+    private void checkAndDisplayContent() {
+        if (rootView == null || containerGroup == null) return;
+
+        DatabaseHelper.UserProfile profile = LoginManager.getCurrentUserProfile();
+        if (profile != null && !profile.profileCompleted) {
+            showWarningMessage();
+        } else {
+            showNormalView();
+        }
+    }
+
+    private void showWarningMessage() {
+        containerGroup.removeAllViews();
+        TextView warningText = new TextView(requireContext());
+        warningText.setText("Start by fulfilling your Profile");
+        warningText.setTextSize(24);
+        warningText.setTextColor(android.graphics.Color.parseColor("#D53F8C"));
+        warningText.setGravity(android.view.Gravity.CENTER);
+        warningText.setLayoutParams(new ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        ));
+        containerGroup.addView(warningText);
+    }
+
+    private void showNormalView() {
+        if (statusText != null) return;
+
+        containerGroup.removeAllViews();
+        View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_map, containerGroup, false);
+        containerGroup.addView(view);
 
         statusText = view.findViewById(R.id.statusText);
         statusIcon = view.findViewById(R.id.statusIcon);
@@ -75,9 +119,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, TrackGP
                     .setPositiveButton("OK", null)
                     .show();
         });
-
-
-        return view;
     }
 
     @Override

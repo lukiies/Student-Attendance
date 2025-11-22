@@ -1,6 +1,7 @@
 package com.example.studentsattendance;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +31,11 @@ public class MainActivity extends AppCompatActivity {
         new TabLayoutMediator(tabLayout, viewPager,
                 (tab, position) -> tab.setText(position == 0 ? "Map" : "Profile")
         ).attach();
+
+        if (getIntent().getBooleanExtra("show_profile_tab", false)) {
+            viewPager.setCurrentItem(1);
+            Toast.makeText(this, "Please fill in all Profile fields", Toast.LENGTH_LONG).show();
+        }
     }
 
     private static class ScreenSlidePagerAdapter extends FragmentStateAdapter {
