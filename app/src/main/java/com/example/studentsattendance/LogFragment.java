@@ -56,17 +56,34 @@ public class LogFragment extends Fragment {
     
     private void loadLogs() {
         long userId = sessionManager.getUserId();
+        
+        android.util.Log.d("LogFragment", "");
+        android.util.Log.d("LogFragment", "═══════════════════════════════════════");
+        android.util.Log.d("LogFragment", "LOADING ATTENDANCE LOGS");
+        android.util.Log.d("LogFragment", "User ID: " + userId);
+        
         List<AttendanceLog> logs = attendanceLogDao.getLogsForUser(userId);
         
+        android.util.Log.d("LogFragment", "Logs found: " + logs.size());
+        
         if (logs.isEmpty()) {
+            android.util.Log.d("LogFragment", "No logs found - showing empty view");
             recyclerView.setVisibility(View.GONE);
             emptyView.setVisibility(View.VISIBLE);
         } else {
+            android.util.Log.d("LogFragment", "Displaying " + logs.size() + " logs");
+            for (int i = 0; i < logs.size(); i++) {
+                AttendanceLog log = logs.get(i);
+                android.util.Log.d("LogFragment", "  Log " + (i+1) + ": " + log.getRegistrationDate() + " " + log.getRegistrationTime() + " - " + log.getStatus());
+            }
+            
             recyclerView.setVisibility(View.VISIBLE);
             emptyView.setVisibility(View.GONE);
             
             adapter = new LogAdapter(logs);
             recyclerView.setAdapter(adapter);
         }
+        
+        android.util.Log.d("LogFragment", "═══════════════════════════════════════");
     }
 }

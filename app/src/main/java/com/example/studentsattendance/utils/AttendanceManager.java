@@ -350,22 +350,40 @@ public class AttendanceManager {
     
     private void handleSuccessfulRegistration(long userId, String date, String time, 
                                              String message, boolean isManual) {
+        android.util.Log.d("AttendanceManager", "");
+        android.util.Log.d("AttendanceManager", "📝 SAVING SUCCESS TO DATABASE");
+        android.util.Log.d("AttendanceManager", "  User ID: " + userId);
+        android.util.Log.d("AttendanceManager", "  Date: " + date);
+        android.util.Log.d("AttendanceManager", "  Time: " + time);
+        android.util.Log.d("AttendanceManager", "  Status: SUCCESS");
+        android.util.Log.d("AttendanceManager", "  Message: " + message);
+        android.util.Log.d("AttendanceManager", "  Is Manual: " + isManual);
+        
         // Create attendance log
         AttendanceLog log = new AttendanceLog(
             userId, date, time, "SUCCESS", message, isManual
         );
-        attendanceLogDao.insertLog(log);
+        long insertedId = attendanceLogDao.insertLog(log);
+        
+        android.util.Log.d("AttendanceManager", "✓ Log saved to database with ID: " + insertedId);
         
         // Mark all locations for this date as registered
         locationDao.markLocationsAsRegistered(userId, date);
+        android.util.Log.d("AttendanceManager", "✓ Locations marked as registered");
     }
     
     private void handleFailedRegistration(long userId, String date, String time, 
                                          String message, boolean isManual) {
+        android.util.Log.d("AttendanceManager", "");
+        android.util.Log.d("AttendanceManager", "📝 SAVING FAILURE TO DATABASE");
+        android.util.Log.d("AttendanceManager", "  Status: FAILED");
+        android.util.Log.d("AttendanceManager", "  Message: " + message);
+        
         AttendanceLog log = new AttendanceLog(
             userId, date, time, "FAILED", message, isManual
         );
-        attendanceLogDao.insertLog(log);
+        long insertedId = attendanceLogDao.insertLog(log);
+        android.util.Log.d("AttendanceManager", "✓ Failure log saved with ID: " + insertedId);
     }
     
     private void handleApiError(long userId, String date, String time, 

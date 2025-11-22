@@ -64,6 +64,10 @@ public class LocationTrackingService extends Service {
     public void onCreate() {
         super.onCreate();
         
+        android.util.Log.d("LocationService", "═══════════════════════════════════════");
+        android.util.Log.d("LocationService", "SERVICE CREATED - Location tracking service initialized");
+        android.util.Log.d("LocationService", "═══════════════════════════════════════");
+        
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         locationDao = new LocationDao(this);
         attendanceLogDao = new AttendanceLogDao(this);
@@ -78,6 +82,12 @@ public class LocationTrackingService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        android.util.Log.d("LocationService", "SERVICE STARTED - Starting foreground service");
+        android.util.Log.d("LocationService", "Update interval: " + (LOCATION_UPDATE_INTERVAL / 1000) + " seconds");
+        android.util.Log.d("LocationService", "Campus coordinates: " + CAMPUS_LAT + ", " + CAMPUS_LNG);
+        android.util.Log.d("LocationService", "Campus radius: " + CAMPUS_RADIUS_METERS + " meters");
+        android.util.Log.d("LocationService", "Simulate on campus: " + MainActivity.simulateLocationOnCampus);
+        
         startForeground(NOTIFICATION_ID, createNotification("Tracking location..."));
         startLocationUpdates();
         return START_STICKY;
@@ -114,13 +124,17 @@ public class LocationTrackingService extends Service {
     }
 
     private void setupLocationCallback() {
+        android.util.Log.d("LocationService", "Setting up location callback listener");
+        
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 if (locationResult == null) {
+                    android.util.Log.w("LocationService", "⚠ Location result is NULL");
                     return;
                 }
 
+                android.util.Log.d("LocationService", "📍 Location update received - " + locationResult.getLocations().size() + " location(s)");
                 for (Location location : locationResult.getLocations()) {
                     handleLocationUpdate(location);
                 }
@@ -129,11 +143,17 @@ public class LocationTrackingService extends Service {
     }
 
     private void startLocationUpdates() {
+        android.util.Log.d("LocationService", "→ Checking location permissions...");
+        
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) 
                 != PackageManager.PERMISSION_GRANTED) {
+            android.util.Log.e("LocationService", "✗ Location permission NOT GRANTED - stopping service");
             stopSelf();
             return;
         }
+        
+        android.util.Log.d("LocationService", "✓ Location permission granted");
+        android.util.Log.d("LocationService", "→ Requesting location updates from FusedLocationProvider");
 
         LocationRequest locationRequest = new LocationRequest.Builder(
                 Priority.PRIORITY_HIGH_ACCURACY, LOCATION_UPDATE_INTERVAL)
@@ -145,29 +165,50 @@ public class LocationTrackingService extends Service {
             locationCallback,
             Looper.getMainLooper()
         );
+        
+        android.util.Log.d("LocationService", "✓ Location updates REQUESTED successfully");
+        android.util.Log.d("LocationService", "Waiting for location updates every " + (LOCATION_UPDATE_INTERVAL / 1000) + " seconds...");
     }
 
     private void handleLocationUpdate(Location location) {
+        String timestamp = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+        
+        android.util.Log.d("LocationService", "");
+        android.util.Log.d("LocationService", "═══════════════ LOCATION UPDATE [" + timestamp + "] ═══════════════");
+        android.util.Log.d("LocationService", "Latitude:  " + location.getLatitude());
+        android.util.Log.d("LocationService", "Longitude: " + location.getLongitude());
+        android.util.Log.d("LocationService", "Accuracy:  " + location.getAccuracy() + " meters");
+        
         boolean wasInsideCampus = isInsideCampus;
         isInsideCampus = isLocationInsideCampus(location);
         
+        android.util.Log.d("LocationService", "Was inside campus: " + wasInsideCampus);
+        android.util.Log.d("LocationService", "Is inside campus:  " + isInsideCampus);
+        
         // Check if user is logged in
         if (!sessionManager.isLoggedIn()) {
+            android.util.Log.w("LocationService", "⚠ User NOT logged in - skipping location processing");
             return;
         }
         
         long userId = sessionManager.getUserId();
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         
+        android.util.Log.d("LocationService", "User ID: " + userId);
+        android.util.Log.d("LocationService", "Date: " + today);
+        
         // Save location if inside campus
         if (isInsideCampus) {
+            android.util.Log.d("LocationService", "✓ INSIDE CAMPUS - Saving location to database");
+            
             LocationRecord locationRecord = new LocationRecord(
                 userId,
                 location.getLatitude(),
                 location.getLongitude(),
                 today
             );
-            locationDao.insertLocation(locationRecord);
+            long recordId = locationDao.insertLocation(locationRecord);
+            android.util.Log.d("LocationService", "Location saved with ID: " + recordId);
             
             // Update notification
             NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -175,14 +216,21 @@ public class LocationTrackingService extends Service {
                 manager.notify(NOTIFICATION_ID, createNotification("You are on campus"));
             }
             
-            // Handle campus entry (first time detection)
-            if (!wasInsideCampus && !hasNotifiedForCampusEntry) {
+            // Check for automatic registration on EVERY location update (every 5 mins)
+            // This ensures we keep checking even if the first attempt failed
+            if (!attendanceLogDao.isAttendanceRegisteredForDate(userId, today)) {
+                android.util.Log.d("LocationService", "");
+                android.util.Log.d("LocationService", "🎯 ON CAMPUS & NOT REGISTERED - Checking registration status");
                 handleCampusEntry(userId, today);
-                hasNotifiedForCampusEntry = true;
+            } else {
+                android.util.Log.d("LocationService", "Still on campus - already registered for today");
             }
         } else {
+            android.util.Log.d("LocationService", "✗ OUTSIDE CAMPUS - No location saved");
+            
             // Reset notification flag when outside campus
             if (wasInsideCampus) {
+                android.util.Log.d("LocationService", "→ Left campus - resetting notification flag");
                 hasNotifiedForCampusEntry = false;
                 NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 if (manager != null) {
@@ -190,11 +238,14 @@ public class LocationTrackingService extends Service {
                 }
             }
         }
+        
+        android.util.Log.d("LocationService", "═══════════════════════════════════════════════════════");
     }
 
     private boolean isLocationInsideCampus(Location location) {
         // Check if we should simulate being on campus
         if (MainActivity.simulateLocationOnCampus) {
+            android.util.Log.d("LocationService", "→ Simulation mode: ENABLED - treating as ON CAMPUS");
             return true;
         }
         
@@ -206,24 +257,40 @@ public class LocationTrackingService extends Service {
             CAMPUS_LNG,
             distance
         );
-        return distance[0] <= CAMPUS_RADIUS_METERS;
+        
+        boolean insideCampus = distance[0] <= CAMPUS_RADIUS_METERS;
+        android.util.Log.d("LocationService", "→ Distance to campus: " + String.format("%.2f", distance[0]) + " meters");
+        android.util.Log.d("LocationService", "→ Inside campus? " + (insideCampus ? "YES" : "NO") + " (threshold: " + CAMPUS_RADIUS_METERS + "m)");
+        
+        return insideCampus;
     }
 
     private void handleCampusEntry(long userId, String today) {
+        android.util.Log.d("LocationService", "");
+        android.util.Log.d("LocationService", "▶▶▶ HANDLING CAMPUS ENTRY ◀◀◀");
+        android.util.Log.d("LocationService", "Checking if attendance already registered for today...");
+        
         // Check if already registered for today
         if (attendanceLogDao.isAttendanceRegisteredForDate(userId, today)) {
+            android.util.Log.d("LocationService", "✓ Already registered for today - no action needed");
             return;
         }
         
-        // Get manual registration setting
-        String manualSetting = settingsDao.getSetting(userId, "manual_registration", "true");
+        android.util.Log.d("LocationService", "✗ NOT registered yet for today");
+        
+        // Get manual registration setting - DEFAULT TO AUTOMATIC (false)
+        String manualSetting = settingsDao.getSetting(userId, "manual_registration", "false");
         boolean isManualMode = "true".equals(manualSetting);
+        
+        android.util.Log.d("LocationService", "Registration mode: " + (isManualMode ? "MANUAL" : "AUTOMATIC"));
         
         if (isManualMode) {
             // Show notification to register manually
+            android.util.Log.d("LocationService", "→ Showing MANUAL registration notification");
             showManualRegistrationNotification();
         } else {
             // Attempt automatic registration
+            android.util.Log.d("LocationService", "→ Attempting AUTOMATIC registration via API");
             attemptAutomaticRegistration(userId, today);
         }
     }
@@ -252,10 +319,20 @@ public class LocationTrackingService extends Service {
     }
 
     private void attemptAutomaticRegistration(long userId, String today) {
+        android.util.Log.d("LocationService", "");
+        android.util.Log.d("LocationService", "┌─────────────────────────────────────────┐");
+        android.util.Log.d("LocationService", "│ AUTOMATIC REGISTRATION ATTEMPT          │");
+        android.util.Log.d("LocationService", "└─────────────────────────────────────────┘");
+        
         User user = userDao.getUserById(userId);
         if (user == null) {
+            android.util.Log.e("LocationService", "✗ User not found in database!");
             return;
         }
+        
+        android.util.Log.d("LocationService", "User found:");
+        android.util.Log.d("LocationService", "  - Email: " + user.getEmail());
+        android.util.Log.d("LocationService", "  - Student ID: " + user.getStudentId());
         
         // Show notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
@@ -272,11 +349,21 @@ public class LocationTrackingService extends Service {
         // Get current location
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) 
                 != PackageManager.PERMISSION_GRANTED) {
+            android.util.Log.e("LocationService", "✗ Location permission not granted!");
             return;
         }
         
+        android.util.Log.d("LocationService", "→ Getting current location...");
+        
         fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
             if (location != null) {
+                android.util.Log.d("LocationService", "✓ Location obtained:");
+                android.util.Log.d("LocationService", "  - Lat: " + location.getLatitude());
+                android.util.Log.d("LocationService", "  - Lng: " + location.getLongitude());
+                android.util.Log.d("LocationService", "");
+                android.util.Log.d("LocationService", "🚀 CALLING AttendanceManager.registerAttendance()");
+                android.util.Log.d("LocationService", "   This will trigger API call to external server");
+                
                 attendanceManager.registerAttendance(
                     userId,
                     user.getEmail(),
@@ -284,19 +371,27 @@ public class LocationTrackingService extends Service {
                     user.getPassword(),
                     location.getLatitude(),
                     location.getLongitude(),
-                    false,
+                    false,  // isManual = false (automatic)
                     new AttendanceManager.AttendanceCallback() {
                         @Override
                         public void onSuccess(String message) {
+                            android.util.Log.d("LocationService", "");
+                            android.util.Log.d("LocationService", "✓✓✓ AUTOMATIC REGISTRATION SUCCESS ✓✓✓");
+                            android.util.Log.d("LocationService", "Message: " + message);
                             showNotification("Success", message, 4);
                         }
                         
                         @Override
                         public void onError(String errorMessage) {
+                            android.util.Log.e("LocationService", "");
+                            android.util.Log.e("LocationService", "✗✗✗ AUTOMATIC REGISTRATION FAILED ✗✗✗");
+                            android.util.Log.e("LocationService", "Error: " + errorMessage);
                             showNotification("Registration Failed", errorMessage, 5);
                         }
                     }
                 );
+            } else {
+                android.util.Log.e("LocationService", "✗ Location is NULL - cannot proceed with registration");
             }
         });
     }
@@ -318,6 +413,12 @@ public class LocationTrackingService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        
+        android.util.Log.d("LocationService", "");
+        android.util.Log.d("LocationService", "═══════════════════════════════════════");
+        android.util.Log.d("LocationService", "SERVICE DESTROYED - Stopping location updates");
+        android.util.Log.d("LocationService", "═══════════════════════════════════════");
+        
         if (fusedLocationClient != null && locationCallback != null) {
             fusedLocationClient.removeLocationUpdates(locationCallback);
         }

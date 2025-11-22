@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             }
         );
         
-        // Request notification permission for Android 13+
+        // Request notification permission for Android
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) 
                     != PackageManager.PERMISSION_GRANTED) {
@@ -178,9 +178,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        //TabLayoutMediator calls this method to know how many menu positions there are
         @Override
-        public int getItemCount() {
+        public int getItemCount() { //just the number of tabs
             return 3;
         }
     }
