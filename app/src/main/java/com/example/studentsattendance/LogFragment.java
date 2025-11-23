@@ -113,10 +113,10 @@ public class LogFragment extends Fragment {
             public void onSuccess(String message) {
                 SimpleDateFormat fullFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
                 dbHelper.updateAttendanceRegistration(profile.email, date, fullFormat.format(new Date()));
-                
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
                         android.widget.Toast.makeText(requireContext(), "Registration successful", android.widget.Toast.LENGTH_SHORT).show();
+                        SoundUtils.playCheckinSound(requireContext());
                         loadAttendanceRecords();
                     });
                 }

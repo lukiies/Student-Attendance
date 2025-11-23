@@ -315,12 +315,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, TrackGP
             public void onSuccess(String message) {
                 SimpleDateFormat fullFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
                 dbHelper.updateAttendanceRegistration(profile.email, date, fullFormat.format(new Date()));
-                
-                // Show success message only when registration completes
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
                         checkInSuccessText.setVisibility(View.VISIBLE);
                         Toast.makeText(requireContext(), "Check-in registered successfully", Toast.LENGTH_SHORT).show();
+                        SoundUtils.playCheckinSound(requireContext());
                     });
                 }
             }

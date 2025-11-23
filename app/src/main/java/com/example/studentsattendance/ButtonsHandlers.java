@@ -69,7 +69,6 @@ public class ButtonsHandlers {
             @Override
             public void onSuccess(String message) {
                 logText.append("\n✓ SUCCESS: " + message + "\n");
-                
                 SimpleDateFormat fullFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
                 Date now = new Date();
                 String today = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(now);
@@ -77,6 +76,7 @@ public class ButtonsHandlers {
                 dbHelper.updateAttendanceRegistration(profile.email, today, fullFormat.format(now));
                 
                 Toast.makeText(context, "Registration successful", Toast.LENGTH_SHORT).show();
+                SoundUtils.playCheckinSound(context);
             }
             
             @Override
@@ -133,6 +133,7 @@ public class ButtonsHandlers {
                 dbHelper.updateAttendanceRegistration(profile.email, today, fullFormat.format(now));
                 
                 Toast.makeText(context, "Attendance saved as registered", Toast.LENGTH_SHORT).show();
+                SoundUtils.playCheckinSound(context);
                 dialog.dismiss();
             });
         }
