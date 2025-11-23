@@ -85,6 +85,27 @@
             <include layout="@layout/item_profile_row" android:id="@+id/rowEmail"/>
             <include layout="@layout/item_profile_row" android:id="@+id/rowStudentId"/>
             <include layout="@layout/item_profile_row" android:id="@+id/rowPassword"/>
+            
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E0E0E0"
+                android:layout_marginVertical="12dp"/>
+
+            <CheckBox
+                android:id="@+id/manualRegistrationCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Only manual registration"
+                android:textSize="16sp"
+                android:textColor="#000000"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E0E0E0"
+                android:layout_marginVertical="12dp"/>
+
             <include layout="@layout/item_profile_row" android:id="@+id/rowBarCode"/>
         </LinearLayout>
 

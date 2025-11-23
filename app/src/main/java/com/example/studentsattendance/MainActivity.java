@@ -23,17 +23,23 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+        EnsurePermissions.checkAndRequestPermissions(this);
+
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
 
         viewPager.setAdapter(new ScreenSlidePagerAdapter(this));
 
         new TabLayoutMediator(tabLayout, viewPager,
-                (tab, position) -> tab.setText(position == 0 ? "Map" : "Profile")
+                (tab, position) -> {
+                    if (position == 0) tab.setText("Map");
+                    else if (position == 1) tab.setText("Log");
+                    else tab.setText("Profile");
+                }
         ).attach();
 
         if (getIntent().getBooleanExtra("show_profile_tab", false)) {
-            viewPager.setCurrentItem(1);
+            viewPager.setCurrentItem(2);
             Toast.makeText(this, "Please fill in all Profile fields", Toast.LENGTH_LONG).show();
         }
     }
@@ -46,16 +52,15 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment createFragment(int position) {
-            if (position == 0)
-                return new MapFragment();
-            else
-                return new ProfileFragment();
+            if (position == 0) return new MapFragment();
+            else if (position == 1) return new LogFragment();
+            else return new ProfileFragment();
         }
 
         //TabLayoutMediator calls this method to know how many menu positions there are
         @Override
         public int getItemCount() {
-            return 2;
+            return 3;
         }
     }
 }

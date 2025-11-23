@@ -41,22 +41,32 @@ public class TrackGPS implements LocationListener {
         try {
             locationManager = (LocationManager) ctxt.getSystemService(LOCATION_SERVICE);
             checkGPS = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            if (checkGPS) {
+            boolean checkNetwork = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            
+            if (checkGPS || checkNetwork) {
                 try {
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINDELAY, MINDISTANCE, this);
-                    if (locationManager != null) {
+                    // Try GPS first
+                    if (checkGPS) {
+                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINDELAY, MINDISTANCE, this);
                         myLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                        if (myLocation != null) {
-                            latitude = myLocation.getLatitude();
-                            longitude = myLocation.getLongitude();
-                            if (listener != null) listener.onLocationUpdated(myLocation);
-                        }
+                    }
+                    
+                    // Use Network provider as fallback (better for emulator)
+                    if (myLocation == null && checkNetwork) {
+                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MINDELAY, MINDISTANCE, this);
+                        myLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    }
+                    
+                    if (myLocation != null) {
+                        latitude = myLocation.getLatitude();
+                        longitude = myLocation.getLongitude();
+                        if (listener != null) listener.onLocationUpdated(myLocation);
                     }
                 } catch (SecurityException e) {
-                    Toast.makeText(ctxt, "No permission to access GPS", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctxt, "No permission to access location", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(ctxt, "No service provider available", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ctxt, "No location provider available", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             e.printStackTrace();

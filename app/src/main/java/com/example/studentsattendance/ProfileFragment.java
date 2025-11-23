@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,6 +27,7 @@ public class ProfileFragment extends Fragment {
     private ActivityResultLauncher<String> imagePickerLauncher;
     private TextView tvProgramValue, tvEmailValue, tvStudentIdValue, tvBarcodeValue;
     private ImageView barcodeImageView;
+    private CheckBox manualRegistrationCheckbox;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class ProfileFragment extends Fragment {
         TextView tvName = view.findViewById(R.id.tvName);
         TextView tvStudentIdHeader = view.findViewById(R.id.tvStudentIdHeader);
         View nameContainer = tvName.getParent() instanceof View ? (View) tvName.getParent() : null;
+        manualRegistrationCheckbox = view.findViewById(R.id.manualRegistrationCheckbox);
 
         DatabaseHelper.UserProfile profile = LoginManager.getCurrentUserProfile();
         if (profile != null) {
@@ -79,6 +82,16 @@ public class ProfileFragment extends Fragment {
             setupRow(view, R.id.rowEmail, R.drawable.ic_email, "Email", profile.email, false);
             setupRow(view, R.id.rowStudentId, R.drawable.ic_id, "Student ID", profile.studentId, false);
             setupRow(view, R.id.rowPassword, R.drawable.ic_key, "Password", "********************", false);
+            
+            manualRegistrationCheckbox.setChecked(profile.manualRegistrationOnly);
+            
+            manualRegistrationCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
+                dbHelper.updateManualRegistrationOnly(profile.email, isChecked);
+                profile.manualRegistrationOnly = isChecked;
+                loginManager.loadUserProfile(profile.email);
+            });
+            
             setupRow(view, R.id.rowBarCode, R.drawable.ic_attach, "BarCode", 
                 profile.barcodeUri.isEmpty() ? "No barcode selected" : profile.barcodeUri, true);
         }
