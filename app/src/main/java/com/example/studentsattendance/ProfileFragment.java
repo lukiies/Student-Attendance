@@ -38,10 +38,10 @@ public class ProfileFragment extends Fragment {
                 if (uri != null) {
                     requireContext().getContentResolver().takePersistableUriPermission(
                         uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    DatabaseHelper.UserProfile profile = LoginManager.getCurrentUserProfile();
-                    if (profile != null) {
-                        loginManager.updateProfileField(profile.email, profile.name, profile.program, 
-                            profile.studentId, uri.toString());
+                    DatabaseHelper.UserProfile freshProfile = LoginManager.getCurrentUserProfile();
+                    if (freshProfile != null) {
+                        loginManager.updateProfileField(freshProfile.email, freshProfile.name, freshProfile.program, 
+                            freshProfile.studentId, uri.toString());
                         displayBarcodeImage(uri.toString());
                         Toast.makeText(requireContext(), "Barcode image updated", Toast.LENGTH_SHORT).show();
                     }
@@ -71,9 +71,12 @@ public class ProfileFragment extends Fragment {
             if (nameContainer != null) {
                 nameContainer.setOnClickListener(v -> {
                     showEditDialog("Name", profile.name, newName -> {
-                        loginManager.updateProfileField(profile.email, newName, profile.program, 
-                            profile.studentId, profile.barcodeUri);
-                        tvName.setText(newName);
+                        DatabaseHelper.UserProfile freshProfile = LoginManager.getCurrentUserProfile();
+                        if (freshProfile != null) {
+                            loginManager.updateProfileField(freshProfile.email, newName, freshProfile.program, 
+                                freshProfile.studentId, freshProfile.barcodeUri);
+                            tvName.setText(newName);
+                        }
                     });
                 });
             }
@@ -146,13 +149,16 @@ public class ProfileFragment extends Fragment {
             } else {
                 TextView tvStudentIdHeader = getView() != null ? getView().findViewById(R.id.tvStudentIdHeader) : null;
                 showEditDialog(label, value, newValue -> {
+                    DatabaseHelper.UserProfile freshProfile = LoginManager.getCurrentUserProfile();
+                    if (freshProfile == null) return;
+                    
                     if (label.equals("Program")) {
-                        loginManager.updateProfileField(profile.email, profile.name, newValue, 
-                            profile.studentId, profile.barcodeUri);
+                        loginManager.updateProfileField(freshProfile.email, freshProfile.name, newValue, 
+                            freshProfile.studentId, freshProfile.barcodeUri);
                         tvProgramValue.setText(newValue);
                     } else if (label.equals("Student ID")) {
-                        loginManager.updateProfileField(profile.email, profile.name, profile.program, 
-                            newValue, profile.barcodeUri);
+                        loginManager.updateProfileField(freshProfile.email, freshProfile.name, freshProfile.program, 
+                            newValue, freshProfile.barcodeUri);
                         tvStudentIdValue.setText(newValue);
                         if (tvStudentIdHeader != null) {
                             tvStudentIdHeader.setText("StudentId: " + newValue);
